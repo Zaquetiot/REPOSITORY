@@ -3,7 +3,7 @@
 
 typedef struct frase{
 	char caracter;
-	char * sig;
+	struct frase * sig;
 }COMMAND;
 
 void agregar_caracter(COMMAND **linea,char c){
@@ -16,7 +16,8 @@ void agregar_caracter(COMMAND **linea,char c){
 		*linea=NewNodo;
 	}
 	else{
-		for(;aux->sig!=NULL;aux=aux->sig)aux->sig=NewNodo;
+		while(aux->sig)aux=aux->sig;
+		aux->sig=NewNodo;
 	}
 }
 
@@ -24,7 +25,7 @@ void clear(COMMAND **linea){
 	COMMAND *aux;
 	while(*linea){
 		aux=*linea;
-		*linea=*linea->sig;
+		*linea=aux->sig;
 		free(aux);
 	}
 }
