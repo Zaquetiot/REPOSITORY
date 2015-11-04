@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-typedef struct nodo_in{
+/*typedef struct nodo_in{
 	char linea[256];
-}nodo_in;
+}nodo_in;*/
 
-void console(nodo_in * NewNodo){
+/*void console(nodo_in * NewNodo){
 	printf(">> ");
 	scanf("%[^\n]",NewNodo->linea);
 	printf("%s\n",NewNodo->linea);
 	/*input_anlisis(linea);*/
 	/*printf("%s\n",linea);*/
-}
+//}
 
 /*void pull(char *lista){
 	int i;
@@ -18,7 +18,7 @@ void console(nodo_in * NewNodo){
 }*/
 
 int main(){
-	nodo_in *NewNodo=(nodo_in*)malloc(sizeof(nodo_in));
+	/*nodo_in *NewNodo=(nodo_in*)malloc(sizeof(nodo_in));
 		NewNodo->linea="hola mundo";
 		free(NewNodo);
 		printf("%s",NewNodo->linea);
@@ -28,5 +28,6 @@ int main(){
 		console(NewNodo);
 		free(NewNodo);
 	}*/
+	char * palabra =
 	return 0;
 }
