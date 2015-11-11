@@ -43,8 +43,9 @@ struct t_node *insertar_hijo(struct t_node **padre,char * token){
 	return Hijo;
 	
 }
+struct t_node *insertar_ult_hijo()
 
-struct t_node *recorrer_arbol(struct t_node** Raiz,char * token){
+struct t_node *recorrer_arbol(struct t_node** Raiz,char * token,id){
 	struct t_node *Nodo_A=*Raiz;
 	struct l_node *Nodo_L=Nodo_A->children;
 	struct l_node *aux=Nodo_L;
@@ -52,7 +53,7 @@ struct t_node *recorrer_arbol(struct t_node** Raiz,char * token){
 		if(strcmp(aux->data->word,token)==0)return aux->data;
 		aux=aux->next;
 	}
-	return insertar_hijo(&Nodo_A,token);//insertar hijos al Nodo_A, 
+	return insertar_hijo(&Nodo_A,token,id);//insertar hijos al Nodo_A, 
 }
 
 TUPLA split(char * linea){
@@ -69,17 +70,31 @@ TUPLA split(char * linea){
 			return retorno;
 		}
 }
-
-void add_token(char * linea,char id,char *ult_token){
+char *ult_token(char *linea){
 	TUPLA tokens;
-	tokens.token=NULL;
+	char *c,*comp;
+	comp=""
+	while(1){
+		tokens=split(c);
+		if(strcmp(tokens.linea_rest,"")==0)return tokens.token;
+	}
+	
+}
+
+void add_token(char * linea, char * id, struct t_node **Raiz){
+	TUPLA tokens;
 	tokens.linea_rest=linea;
-	struct t_node *Raiz=ini_arbol();
-	struct t_node *ubicacion=Raiz;
-	do{
+	struct t_node *ubicacion=*Raiz;
+	while(1){
 		tokens=split(tokens.linea_rest);
-		ubicacion=recorrer_arbol(&ubicacion,tokens.token);
-	}while(tokens.token);
+		if(tokens.token)ubicacion=recorrer_arbol(&ubicacion,tokens.token,id);
+		if()
+		else{break;}
+	}
+	/*do{
+		tokens=split(tokens.linea_rest);
+		if(tokens.token)ubicacion=recorrer_arbol(&ubicacion,tokens.token);
+	}while(tokens.token);*/
 }
 
 void arbol(struct t_node ** Raiz,char *linea,char id){
@@ -98,7 +113,8 @@ void arbol(struct t_node ** Raiz,char *linea,char id){
 		return;}
 }
 	
-void def_commands(struct t_node ** Raiz){
+struct t_node *def_commands(){
+	struct t_node *Raiz=ini_arbol();
 	TUPLA tokens;
 	char *c,*aux;
 	c=malloc(sizeof(char)*256);
@@ -108,19 +124,22 @@ void def_commands(struct t_node ** Raiz){
 	for (i = 0;i<a;i++){
 		printf("\n>>");
 		scanf(" %[^\n]s", c);
-		do{
+		tokens=split(c);
+		add_token(c,tokens.token,&Raiz);
+		/*do{
 			tokens=split(c);
-			/*aqui insertar token en el arbol*/
 			if(tokens.token)printf("%s %s\n",tokens.token,tokens.linea_rest);
 			c=tokens.linea_rest;
-		}while(tokens.token);
-		//arbol(Raiz,c,c[0]);
+		}while(tokens.token);*/
 	}
 	free(aux);
+	return Raiz;
 }
 		
 int main(){
-	struct t_node *Raiz=NULL;
-	def_commands(&Raiz);
+	struct t_node *Raiz=def_commands();
+	while(1){
+		analy_commands();
+	}
 	return 0;
 }
