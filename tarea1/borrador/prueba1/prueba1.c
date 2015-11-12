@@ -21,10 +21,26 @@ struct l_node
     struct l_node *next;
 };
 
+void agregar_l_node(struct l_node **lista,struct t_node *hijo){
+	struct l_node *NewNodo,*aux;
+	NewNodo=malloc(sizeof(struct l_node));
+	NewNodo->data=hijo;
+	NewNodo->next=NULL;
+	aux=*lista;
+	if(aux==NULL){
+		*lista=NewNodo;
+	}
+	else{
+		while(aux->next)aux=aux->next;
+		aux->next=NewNodo;
+	}
+}
+
 void agregar_token(TOKEN **linea,char *token){
 	TOKEN *NewNodo,*aux;
 	NewNodo=malloc(sizeof(TOKEN));
-	NewNodo->token=token;
+	NewNodo->token=malloc(sizeof(char)*256);
+	strcpy(NewNodo->token,token);
 	NewNodo->sig=NULL;
 	aux=*linea;
 	if(aux==NULL){
@@ -40,6 +56,7 @@ void clear(TOKEN **linea){
 	TOKEN *aux;
 	while(*linea){
 		aux=*linea;
+		free(aux->token);
 		*linea=aux->sig;
 		free(aux);
 	}
@@ -126,13 +143,43 @@ struct t_node *ini_arbol(){
 }
 */
 
+struct t_node *insertar_hijo(struct t_node **padre,char * token,char *ult_token,char *id){
+	struct t_node *Padre=*padre;
+	struct t_node *Hijo=malloc(sizeof(struct t_node));
+	
+	Hijo->word=malloc(sizeof(char)*256);
+	Hijo->children=NULL;
+	if(strcmp(token,ult_token==0))
+	add_node_list(&(Padre->children),Hijo);
+	return Hijo;
+	
+}
+
+struct t_node *recorrer_arbol(struct t_node **Raiz,char *token,char *ult_token,char *id){
+	struct t_node *Nodo_A=*Raiz;
+	struct l_node *Nodo_L=Nodo_A->children;
+	struct l_node *aux=Nodo_L;
+	while(aux){
+		if(strcmp(aux->data->word,token)==0)return aux->data;
+		aux=aux->next;
+	}
+	return insertar_hijo(&Nodo_A,token,ult_token,id);//insertar hijos al Nodo_A, 
+}
+
 struct t_node *add_tokens(TOKEN *lista){
 	struct t_node *Raiz=ini_raiz();
 	struct t_node *ubicacion=Raiz;
+	char *id,*ult_token;
+	TOKEN *aux=lista;
+	while(aux->sig)aux=aux->sig;
+	id=lista->token;
+	ult_token=aux->token;
+	lista=lista->sig;
 	while(lista){
-		ubicacion=recorrer_arbol(&ubicacion,lista->token,);
+		ubicacion=recorrer_arbol(&ubicacion,lista->token,ult_token,id);
 		lista->sig;
 	}
+	return Raiz;
 }
 
 void def_commands(){     //dudas en limpieza de memoria(memory leak)
@@ -145,7 +192,7 @@ void def_commands(){     //dudas en limpieza de memoria(memory leak)
 		printf("\n>>");
 		scanf(" %[^\n]s", c);
 		TOKEN *lista=split(c);
-		struct t_node *Raiz=add_tokens(lista);
+		//struct t_node *Raiz=add_tokens(lista);
 		recorre(lista);
 		clear(&lista);
 		//ultimo_token=ult_token(c);
