@@ -39,8 +39,10 @@ void selecion_exec(char* id){       	//En el caso de la implementacion de
 }								
 	
 int main(){
-	char* id="1";
-	printf("numero de funcion a llamar: ");
-	selecion_exec(id);
+	int num;
+	char *token=NULL;
+	char *word="hola";
+	num=strcmp(token,word);
+	printf("%d",num);
 	return 0;
 }
