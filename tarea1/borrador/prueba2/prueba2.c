@@ -37,13 +37,15 @@ void f4(const char *archivo){
 	printf("hola mundo esta es la funcion 4 que analiza el %s",archivo);
 }
 
-void insertar_callback(struct t_node **Hijo,char *id){          //En el caso de la implementacion de
+void insertar_callback(struct t_node **Hijo,char *id){          
 	struct t_node *Nodo=*Hijo;
-	void (*p)(const char*);                                                 //los callbacks, implementar en cada condicion una
-	if(strcmp(id,"1")==0){                          //una dereferenciacion del t_node a insertar
-		p=f1;                                                   //de tal modo de poder llegar al campo callback
-		Nodo->callback=p;                                   //y hacer la asignacion correspondiente.
-	}
+	void (*p)(const char*);                                                 
+	/*if(strcmp(id,"0")==0){
+		p=f0;
+		Nodo->callback=p;
+	}*/
+	
+	if(strcmp(id,"1")==0)Nodo->callback=f1;                             
 	else if(strcmp(id,"2")==0){
 		p=f2;
 		Nodo->callback=p;
@@ -204,19 +206,21 @@ struct t_node *recorrer_arbol_pet(struct t_node *ubicacion,char *token,TOKEN *an
 	char *ult_token=antepenultimo->token;
 	const char *archivo=(const char*)antepenultimo->sig->token;
 	printf("%s %s\n",ult_token,archivo);
-	while(aux&&strcmp(ult_token,token)){
-		if(strcmp(aux->data->word,ult_token)==0){
-			printf("%s %p %p %p",aux->data->word,aux->data->word,aux->data->children,aux->data->callback);
-			if(aux->data->callback){
-				(aux->data->callback)(archivo);
-				return NULL;
+	while(aux){
+		if(strcmp(aux->data->word,token)==0){
+			if(strcmp(aux->data->word,ult_token)==0){
+				//printf("%s %p %p %p",aux->data->word,aux->data->word,aux->data->children,aux->data->callback);
+				if(aux->data->callback){
+					(aux->data->callback)(archivo);
+					return NULL;
+				}
+				else{
+					printf("No esta definido este comando\n");
+					return NULL;
+				}
 			}
-			else{
-				printf("No esta definido este comando\n");
-				return NULL;
-			}
+			return aux->data;
 		}
-		if(strcmp(aux->data->word,token)==0)return aux->data;
 		aux=aux->next;
 	}
 	printf("No esta definido este comando");
@@ -251,8 +255,8 @@ int main(){
     //printf("children:%p, word:%p, callback:%p",Raiz->children,Raiz->word,Raiz->callback);
     struct t_node *Raiz;
     Raiz=def_comandos();
-    peticion_comandos(Raiz);
     //recorrer_en_prof(Raiz);
+    peticion_comandos(Raiz);
     return 0;
 }
 
